@@ -2,22 +2,6 @@
 
 A comprehensive job portal web application built with Laravel 11, featuring CMS capabilities, REST API, and advanced security features.
 
-## 📋 Table of Contents
-
--   [Project Description](#project-description)
--   [Features](#features)
--   [Requirements](#requirements)
--   [Installation](#installation)
--   [Configuration](#configuration)
--   [Usage](#usage)
--   [API Documentation](#api-documentation)
--   [Task Requirements](#task-requirements)
--   [Evaluation Criteria](#evaluation-criteria)
-
-## 🎯 Project Description
-
-You are tasked with creating a basic Job Portal Web App with CMS (Content Management System) using PHP programming language with Laravel framework. The system should allow users to log in, manage user logins, and manage job portal. There should also be a public page where public visitor can view the available jobs.
-
 ## ✨ Features
 
 ### Core Features Implemented
@@ -28,15 +12,6 @@ You are tasked with creating a basic Job Portal Web App with CMS (Content Manage
 -   🌐 **Public Job Portal** - Public job listings with search and filtering
 -   📱 **REST API** - Secure API endpoints for third-party integrations
 -   🎯 **Job Applications** - CV and ID card upload system
-
-### Advanced Features
-
--   🔑 **API Security** - API key authentication with rate limiting
--   ⭐ **Job Bookmarking** - Users can save favorite jobs
--   📊 **Interactive API Documentation** - Swagger/OpenAPI 3.0 interface
--   🛡️ **Security Features** - XSS protection, CSRF tokens, secure sessions
--   🔍 **Advanced Search** - Filter by department, company, salary range
--   📧 **Email Integration** - Password reset and notification emails
 
 ## 🔧 Requirements
 
@@ -119,14 +94,6 @@ DB_USERNAME=your_database_username
 DB_PASSWORD=your_database_password
 ```
 
-#### Create Database
-
-Create a new MySQL database:
-
-```sql
-CREATE DATABASE job_portal CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
-```
-
 #### Run Migrations and Seeders
 
 ```bash
@@ -184,7 +151,7 @@ APP_DEBUG=true
 APP_URL=http://localhost:8000
 
 # Password Reset Settings
-PASSWORD_RESET_DEMO_MODE=false
+PASSWORD_RESET_DEMO_MODE=true
 PASSWORD_RESET_TOKEN_EXPIRE_HOURS=24
 
 # Database Configuration
@@ -212,6 +179,8 @@ FILESYSTEM_DISK=public
 
 ### Mail Configuration
 
+For development environments, change the `PASSWORD_RESET_DEMO_MODE` to `true`.
+
 For production environments, configure proper SMTP settings:
 
 ```env
@@ -222,6 +191,8 @@ MAIL_PORT=587
 MAIL_USERNAME=your-email@gmail.com
 MAIL_PASSWORD=your-app-password
 MAIL_ENCRYPTION=tls
+
+PASSWORD_RESET_DEMO_MODE=false
 ```
 
 ## 🏃‍♂️ Usage
@@ -305,33 +276,6 @@ Use API key authentication:
 -   **100 requests per minute** per IP address
 -   Rate limit information included in response headers
 
-## 📁 Project Structure
-
-```
-job-portal/
-├── app/
-│   ├── Http/Controllers/
-│   │   ├── Api/              # API Controllers
-│   │   ├── AdminController.php
-│   │   ├── AuthController.php
-│   │   └── PublicController.php
-│   ├── Models/               # Eloquent Models
-│   ├── Mail/                 # Mail Classes
-│   └── Console/Commands/     # Artisan Commands
-├── database/
-│   ├── migrations/           # Database Migrations
-│   └── seeders/             # Database Seeders
-├── resources/views/          # Blade Templates
-├── routes/
-│   ├── web.php              # Web Routes
-│   └── api.php              # API Routes
-├── docs/                    # Documentation
-│   ├── flowchart.wsd        # System Flowchart
-│   ├── erd.dbml            # Database ERD
-│   └── API_DOCUMENTATION.md
-└── storage/app/public/      # File Storage
-```
-
 ## 🛠️ Development Commands
 
 ```bash
@@ -355,33 +299,6 @@ npm run dev              # Development build
 npm run build           # Production build
 npm run watch          # Watch for changes
 ```
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **Permission Denied Errors**
-
-    ```bash
-    chmod -R 755 storage bootstrap/cache
-    ```
-
-2. **Database Connection Issues**
-
-    - Check your `.env` database configuration
-    - Ensure MySQL service is running
-    - Verify database exists
-
-3. **Missing Dependencies**
-
-    ```bash
-    composer install
-    npm install
-    ```
-
-4. **API Key Issues**
-    - Check `API_KEYS` in `.env` file
-    - Generate new API key with `php artisan api:generate-key`
 
 ## 🚀 Deployment
 
