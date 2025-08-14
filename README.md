@@ -1,0 +1,3 @@
+-   ER Diagram dapat dilihat di https://dbdiagram.io/d/by-decodes-689988e2dd90d17865545423 atau dapat dilihat dalam bentuk gambar di folder docs
+-   Flowchart dapat dilihat di https://www.plantuml.com/plantuml/uml/ dengan menggunakan isi dari file flowchart.wsd atau dapat dilihat dalam bentuk gambar di folder docs
+-   Kode Program dan cara instalasinya ada di folder job-portal

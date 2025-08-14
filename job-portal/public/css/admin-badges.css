@@ -1,0 +1,65 @@
+/* Admin badge and role styles */
+.badge {
+    font-size: 0.75em;
+    padding: 0.35em 0.65em;
+    border-radius: 0.25rem;
+}
+
+.badge.bg-success {
+    background-color: #198754 !important;
+}
+
+.badge.bg-warning {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+}
+
+.badge.bg-danger {
+    background-color: #dc3545 !important;
+}
+
+.badge.bg-info {
+    background-color: #0dcaf0 !important;
+    color: #000 !important;
+}
+
+.badge.bg-primary {
+    background-color: #0d6efd !important;
+}
+
+.badge.bg-secondary {
+    background-color: #6c757d !important;
+}
+
+/* Status indicators */
+.text-success {
+    color: #198754 !important;
+}
+
+.text-danger {
+    color: #dc3545 !important;
+}
+
+.text-warning {
+    color: #fd7e14 !important;
+}
+
+.text-muted {
+    color: #6c757d !important;
+}
+
+/* Role-specific styling */
+.role-admin .badge {
+    background-color: #dc3545 !important;
+    color: white;
+}
+
+.role-user .badge {
+    background-color: #28a745 !important;
+    color: white;
+}
+
+.role-hr .badge {
+    background-color: #17a2b8 !important;
+    color: white;
+}

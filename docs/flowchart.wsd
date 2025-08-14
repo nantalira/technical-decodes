@@ -1,0 +1,101 @@
+@startuml Job Portal Flowchart
+
+!define RECTANGLE class
+skinparam pageSize A3
+skinparam pageOrientation landscape
+skinparam pageMargin 10
+skinparam noteBackgroundColor lightyellow
+skinparam activityBackgroundColor lightblue
+skinparam activityBorderColor navy
+skinparam conditionStyle diamond
+skinparam partitionBorderColor black
+skinparam partitionBackgroundColor lightgray
+
+title Job Portal Web Application - System Flowchart
+
+start
+
+@startuml Job Portal System
+
+skinparam pageSize A4
+skinparam pageOrientation landscape
+skinparam pageMargin 15
+skinparam backgroundColor white
+skinparam defaultFontSize 10
+
+' Colors
+skinparam activityBackgroundColor lightblue
+skinparam activityBorderColor darkblue
+skinparam noteBackgroundColor lightyellow
+skinparam partitionBackgroundColor #E8F4FD
+skinparam partitionBorderColor darkblue
+
+title Job Portal Web Application - System Flow
+
+start
+
+:User Access Portal;
+
+if (Authenticated?) then (Yes)
+  
+  if (Role = Admin?) then (Yes)
+    partition "Admin Panel" #lightcoral {
+      :Admin Dashboard;
+      :Manage Users;
+      :Manage Jobs;  
+      :Review Applications;
+      note right: CRUD Operations for Users & Jobs
+    }
+  else (User)
+    partition "User Panel" #lightgreen {
+      :User Dashboard;
+      :Browse Jobs;
+      :Apply Jobs (Auto-filled);
+      :Manage Bookmarks;
+      :View Applications;
+      note right: Profile-based application
+    }
+  endif
+  
+else (No)
+  
+  partition "Public Access" #lightyellow {
+    :Public Job Portal;
+    :Browse Jobs;
+    
+    if (Action?) then (Guest Apply)
+      :Guest Form;
+      note right: Complete personal data required
+      :Submit Application;
+    elseif (Login)
+      :Login Process;
+      if (Forgot Password?) then (Yes)
+        :Reset Password;
+        :Email Reset Link;
+      endif
+      :Authenticate & Redirect;
+    elseif (Register)
+      :Registration Form;
+      :Create Account;
+    elseif (API Access)
+      partition "REST API" #lightcoral {
+        :Validate API Key;
+        :Rate Limiting Check;
+        if (Endpoint?) then (GET /jobs)
+          :Return Jobs JSON;
+        elseif (POST /apply)
+          :Process Application;
+        else (Other)
+          :API Documentation;
+        endif
+      }
+    endif
+  }
+  
+endif
+
+:Complete Process;
+
+stop
+
+@enduml

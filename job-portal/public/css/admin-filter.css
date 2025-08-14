@@ -1,0 +1,48 @@
+/* Admin Filter Styles */
+#toggleFilter.active {
+    background-color: #0d6efd !important;
+    border-color: #0d6efd !important;
+    color: white !important;
+}
+
+#filterSection {
+    transition: all 0.3s ease;
+}
+
+.card.bg-light {
+    border-left: 4px solid #0d6efd;
+}
+
+.form-select:focus,
+.form-control:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Responsive filter adjustments */
+@media (max-width: 768px) {
+    .d-flex.justify-content-between {
+        flex-direction: column;
+        gap: 1rem;
+    }
+
+    .d-flex.justify-content-between > div {
+        justify-content: center;
+        text-align: center;
+    }
+
+    .dataTables_info,
+    .dataTables_paginate {
+        float: none;
+        text-align: center;
+    }
+
+    .dataTables_wrapper .row {
+        margin: 0;
+    }
+
+    .dataTables_wrapper .row > div {
+        text-align: center;
+        margin-bottom: 1rem;
+    }
+}

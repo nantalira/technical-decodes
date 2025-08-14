@@ -1,0 +1,643 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Job Portal API Documentation",
+        "description": "REST API for Job Portal application with job listings and applications",
+        "contact": {
+            "name": "Job Portal Admin",
+            "email": "admin@golekgawe.com"
+        },
+        "license": {
+            "name": "MIT",
+            "url": "https://opensource.org/licenses/MIT"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000",
+            "description": "Job Portal API Server"
+        }
+    ],
+    "paths": {
+        "/api/v1/jobs": {
+            "get": {
+                "tags": ["Jobs"],
+                "summary": "Get list of available jobs",
+                "description": "Returns paginated list of active jobs with optional filtering",
+                "operationId": "getJobsList",
+                "parameters": [
+                    {
+                        "name": "per_page",
+                        "in": "query",
+                        "description": "Number of items per page (max 50)",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10,
+                            "maximum": 50,
+                            "minimum": 1
+                        }
+                    },
+                    {
+                        "name": "search",
+                        "in": "query",
+                        "description": "Search in job title, description, or company name",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "developer"
+                        }
+                    },
+                    {
+                        "name": "department",
+                        "in": "query",
+                        "description": "Filter by department",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "IT"
+                        }
+                    },
+                    {
+                        "name": "company",
+                        "in": "query",
+                        "description": "Filter by company name",
+                        "required": false,
+                        "schema": {
+                            "type": "string",
+                            "example": "Tech Solutions"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Jobs retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Jobs retrieved successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "jobs": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "$ref": "#/components/schemas/Job"
+                                                    }
+                                                },
+                                                "pagination": {
+                                                    "properties": {
+                                                        "current_page": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "per_page": {
+                                                            "type": "integer",
+                                                            "example": 10
+                                                        },
+                                                        "total": {
+                                                            "type": "integer",
+                                                            "example": 25
+                                                        },
+                                                        "total_pages": {
+                                                            "type": "integer",
+                                                            "example": 3
+                                                        },
+                                                        "has_more_pages": {
+                                                            "type": "boolean",
+                                                            "example": true
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "ApiKeyQuery": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/jobs/{id}": {
+            "get": {
+                "tags": ["Jobs"],
+                "summary": "Get job details by ID",
+                "description": "Returns detailed information about a specific job",
+                "operationId": "getJobById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "Job ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Job retrieved successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Job retrieved successfully"
+                                        },
+                                        "data": {
+                                            "$ref": "#/components/schemas/JobDetail"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Job not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "ApiKeyQuery": []
+                    }
+                ]
+            }
+        },
+        "/api/v1/jobs/apply": {
+            "post": {
+                "tags": ["Applications"],
+                "summary": "Submit job application",
+                "description": "Submit a new job application with required documents",
+                "operationId": "applyForJob",
+                "requestBody": {
+                    "description": "Job application data",
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "properties": {
+                                    "job_id": {
+                                        "description": "Job ID to apply for",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "name": {
+                                        "description": "Applicant full name",
+                                        "type": "string",
+                                        "example": "John Doe"
+                                    },
+                                    "email": {
+                                        "description": "Applicant email",
+                                        "type": "string",
+                                        "format": "email",
+                                        "example": "john.doe@example.com"
+                                    },
+                                    "phone": {
+                                        "description": "Phone number",
+                                        "type": "string",
+                                        "example": "+62812345678"
+                                    },
+                                    "address": {
+                                        "description": "Full address",
+                                        "type": "string",
+                                        "example": "Jakarta, Indonesia"
+                                    },
+                                    "cv_file": {
+                                        "description": "CV file (PDF/DOC/DOCX, max 5MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "id_card_photo": {
+                                        "description": "ID card photo (JPG/PNG, max 2MB)",
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "cover_letter": {
+                                        "description": "Cover letter (optional)",
+                                        "type": "string",
+                                        "example": "I am interested in this position..."
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Application submitted successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Job application submitted successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "application_id": {
+                                                    "type": "integer",
+                                                    "example": 123
+                                                },
+                                                "job_title": {
+                                                    "type": "string",
+                                                    "example": "Senior Laravel Developer"
+                                                },
+                                                "company_name": {
+                                                    "type": "string",
+                                                    "example": "Tech Solutions Inc"
+                                                },
+                                                "status": {
+                                                    "type": "string",
+                                                    "example": "pending"
+                                                },
+                                                "applied_at": {
+                                                    "type": "string",
+                                                    "format": "date-time"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Job not found or expired",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "409": {
+                        "description": "Already applied for this job",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ValidationErrorResponse"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/ErrorResponse"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "ApiKeyAuth": []
+                    },
+                    {
+                        "ApiKeyQuery": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Job": {
+                "title": "Job",
+                "description": "Job listing information",
+                "properties": {
+                    "id": {
+                        "description": "Job unique identifier",
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "description": "Job title",
+                        "type": "string",
+                        "example": "Senior Laravel Developer"
+                    },
+                    "company_name": {
+                        "description": "Company name",
+                        "type": "string",
+                        "example": "Tech Solutions Inc"
+                    },
+                    "location": {
+                        "description": "Job location",
+                        "type": "string",
+                        "example": "Jakarta, Indonesia"
+                    },
+                    "job_type": {
+                        "type": "string",
+                        "enum": [
+                            "full_time",
+                            "part_time",
+                            "contract",
+                            "freelance"
+                        ],
+                        "example": "full_time"
+                    },
+                    "salary_range": {
+                        "description": "Salary range",
+                        "type": "string",
+                        "example": "10-15 million IDR"
+                    },
+                    "experience_required": {
+                        "description": "Required experience",
+                        "type": "string",
+                        "example": "3-5 years"
+                    },
+                    "skills_required": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        },
+                        "example": ["Laravel", "PHP", "MySQL"]
+                    },
+                    "is_active": {
+                        "description": "Job availability status",
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "application_deadline": {
+                        "type": "string",
+                        "format": "date",
+                        "example": "2024-12-31"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "JobDetail": {
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/Job"
+                    },
+                    {
+                        "properties": {
+                            "description": {
+                                "type": "string",
+                                "example": "We are looking for an experienced Laravel developer..."
+                            },
+                            "requirements": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "Bachelor degree in IT",
+                                    "3+ years Laravel experience"
+                                ]
+                            },
+                            "benefits": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "Health insurance",
+                                    "Flexible working hours"
+                                ]
+                            },
+                            "application_count": {
+                                "description": "Number of applications received",
+                                "type": "integer",
+                                "example": 15
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "ErrorResponse": {
+                "title": "Error Response",
+                "description": "Standard error response format",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Resource not found"
+                    },
+                    "error_code": {
+                        "type": "string",
+                        "example": "RESOURCE_NOT_FOUND"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ValidationErrorResponse": {
+                "title": "Validation Error Response",
+                "description": "Validation error response format",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": false
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "The given data was invalid"
+                    },
+                    "errors": {
+                        "properties": {
+                            "email": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": ["The email field is required."]
+                            },
+                            "cv_file": {
+                                "type": "array",
+                                "items": {
+                                    "type": "string"
+                                },
+                                "example": [
+                                    "The cv file must be a file of type: pdf, doc, docx."
+                                ]
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "timestamp": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "PaginatedJobsResponse": {
+                "title": "Paginated Jobs Response",
+                "description": "Paginated job listings response",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/Job"
+                        }
+                    },
+                    "pagination": {
+                        "properties": {
+                            "current_page": {
+                                "type": "integer",
+                                "example": 1
+                            },
+                            "total_pages": {
+                                "type": "integer",
+                                "example": 5
+                            },
+                            "per_page": {
+                                "type": "integer",
+                                "example": 20
+                            },
+                            "total_records": {
+                                "type": "integer",
+                                "example": 87
+                            },
+                            "has_next": {
+                                "type": "boolean",
+                                "example": true
+                            },
+                            "has_prev": {
+                                "type": "boolean",
+                                "example": false
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "securitySchemes": {
+            "ApiKeyAuth": {
+                "type": "apiKey",
+                "description": "API Key untuk mengakses endpoints",
+                "name": "X-API-Key",
+                "in": "header"
+            },
+            "ApiKeyQuery": {
+                "type": "apiKey",
+                "description": "API Key sebagai query parameter",
+                "name": "api_key",
+                "in": "query"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Jobs",
+            "description": "Job management endpoints"
+        },
+        {
+            "name": "Applications",
+            "description": "Job application endpoints"
+        }
+    ]
+}

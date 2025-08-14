@@ -1,0 +1,121 @@
+Table users {
+  id bigint [primary key, increment]
+  name varchar(255) [not null]
+  email varchar(255) [unique, not null]
+  role enum('user', 'admin') [default: 'user']
+  password varchar(255) [not null]
+  remember_token varchar(100) [null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table user_details {
+  id bigint [primary key, increment]
+  user_id bigint [not null, unique]
+  phone varchar(20) [null]
+  address text [null]
+  cv_path varchar(255) [null]
+  ktp_path varchar(255) [null]
+  birth_date date [null]
+  gender varchar(20) [null]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table jobs {
+  id bigint [primary key, increment]
+  title varchar(255) [not null]
+  description text [not null]
+  department varchar(100) [null]
+  company_name varchar(255) [not null]
+  company_logo varchar(255) [null]
+  published_date datetime [not null]
+  expired_date datetime [not null]
+  location varchar(255) [null]
+  salary_min decimal(12,2) [null]
+  salary_max decimal(12,2) [null]
+  created_by bigint [not null] // user id (admin)
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+}
+
+Table job_bookmarks {
+  id bigint [primary key, increment]
+  user_id bigint [not null]
+  job_id bigint [not null]
+  created_at timestamp [default: `now()`]
+
+  indexes {
+    (user_id, job_id) [unique, name: 'idx_user_job_bookmark']
+    (user_id) [name: 'idx_bookmarks_user']
+    (job_id) [name: 'idx_bookmarks_job']
+  }
+}
+
+Table job_applications {
+  id bigint [primary key, increment]
+  user_id bigint [null] // nullable for public applications
+  job_id bigint [not null]
+
+  // Applicant Information
+  name varchar(255) [not null]
+  email varchar(255) [not null]
+  phone varchar(20) [null]
+  birth_date date [null]
+  address text [null]
+  gender enum('male', 'female') [null]
+
+  // Document Paths
+  cv_path varchar(255) [not null]
+  ktp_path varchar(255) [not null]
+
+  // Application Status
+  status enum('pending', 'reviewing', 'accepted', 'rejected') [default: 'pending']
+  applied_at timestamp [default: `now()`]
+  created_at timestamp [default: `now()`]
+  updated_at timestamp [default: `now()`]
+
+  indexes {
+    (user_id) [name: 'idx_applications_user']
+    (job_id) [name: 'idx_applications_job']
+    (status) [name: 'idx_applications_status']
+    (email) [name: 'idx_applications_email']
+  }
+}
+
+Table sessions {
+  id varchar(255) [primary key]
+  user_id bigint [null]
+  ip_address varchar(45) [null]
+  user_agent text [null]
+  payload longtext [not null]
+  last_activity integer [not null]
+
+  indexes {
+    (user_id) [name: 'sessions_user_id_index']
+    (last_activity) [name: 'sessions_last_activity_index']
+  }
+}
+
+Table password_reset_tokens {
+  email varchar(255) [primary key]
+  token varchar(255) [not null]
+  created_at timestamp [null]
+}
+
+// Relationships
+Ref: user_details.user_id - users.id [delete: cascade]
+
+// Job relationships
+Ref: jobs.created_by > users.id [delete: restrict]
+
+// Job bookmark relationships
+Ref: job_bookmarks.user_id > users.id [delete: cascade]
+Ref: job_bookmarks.job_id > jobs.id [delete: cascade]
+
+// Job application relationships
+Ref: job_applications.user_id > users.id [delete: cascade]
+Ref: job_applications.job_id > jobs.id [delete: cascade]
+
+// Session relationships
+Ref: sessions.user_id > users.id [delete: cascade]

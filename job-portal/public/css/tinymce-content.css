@@ -1,0 +1,152 @@
+/* TinyMCE Content Styling */
+.tinymce-content {
+    line-height: 1.7;
+    color: #333;
+}
+
+.tinymce-content h1 {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    margin-top: 1.5rem;
+    border-bottom: 3px solid #667eea;
+    padding-bottom: 0.5rem;
+}
+
+.tinymce-content h2 {
+    font-size: 1.7rem;
+    font-weight: bold;
+    color: #34495e;
+    margin-bottom: 0.8rem;
+    margin-top: 1.3rem;
+    border-left: 4px solid #28a745;
+    padding-left: 1rem;
+}
+
+.tinymce-content h3 {
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #495057;
+    margin-bottom: 0.7rem;
+    margin-top: 1.1rem;
+    position: relative;
+}
+
+.tinymce-content h3::before {
+    content: "▶";
+    color: #667eea;
+    margin-right: 0.5rem;
+}
+
+.tinymce-content h4 {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #6c757d;
+    margin-bottom: 0.6rem;
+    margin-top: 1rem;
+}
+
+.tinymce-content p {
+    margin-bottom: 1rem;
+    text-align: justify;
+}
+
+.tinymce-content ul,
+.tinymce-content ol {
+    margin-bottom: 1rem;
+    padding-left: 1.5rem;
+}
+
+.tinymce-content ul li {
+    margin-bottom: 0.4rem;
+    position: relative;
+}
+
+.tinymce-content ul li::marker {
+    color: #667eea;
+}
+
+.tinymce-content ol li {
+    margin-bottom: 0.4rem;
+    padding-left: 0.3rem;
+}
+
+.tinymce-content strong,
+.tinymce-content b {
+    color: #2c3e50;
+    font-weight: 700;
+}
+
+.tinymce-content em,
+.tinymce-content i {
+    color: #6c757d;
+    font-style: italic;
+}
+
+.tinymce-content blockquote {
+    border-left: 4px solid #f39c12;
+    background: #fef9e7;
+    padding: 1rem;
+    margin: 1.5rem 0;
+    border-radius: 5px;
+    font-style: italic;
+}
+
+.tinymce-content table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.tinymce-content table th {
+    background: #667eea;
+    color: white;
+    padding: 12px;
+    text-align: left;
+    font-weight: 600;
+}
+
+.tinymce-content table td {
+    padding: 12px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.tinymce-content table tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.tinymce-content table tr:hover {
+    background: #e3f2fd;
+}
+
+/* Responsive adjustments for TinyMCE content */
+@media (max-width: 768px) {
+    .tinymce-content h1 {
+        font-size: 1.6rem;
+    }
+
+    .tinymce-content h2 {
+        font-size: 1.4rem;
+    }
+
+    .tinymce-content h3 {
+        font-size: 1.2rem;
+    }
+
+    .tinymce-content h4 {
+        font-size: 1.1rem;
+    }
+
+    .tinymce-content table {
+        font-size: 0.9rem;
+    }
+
+    .tinymce-content table th,
+    .tinymce-content table td {
+        padding: 8px;
+    }
+}
