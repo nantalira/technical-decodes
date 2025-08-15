@@ -174,7 +174,7 @@ class PublicController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Application submitted successfully');
+        return redirect()->back()->with('job_application_success', 'Application submitted successfully');
     }
 
     /**
@@ -202,7 +202,7 @@ class PublicController extends Controller
             ->first();
 
         if ($existingApplication) {
-            return redirect()->back()->with('error', 'You have already applied for this job with this email');
+            return redirect()->back()->with('job_application_error', 'You have already applied for this job with this email');
         }
 
         // Handle CV upload
@@ -212,7 +212,7 @@ class PublicController extends Controller
             $filename = time() . '_cv_' . $file->getClientOriginalName();
             $cvPath = $file->storeAs('guest_applications', $filename, 'public');
         } else {
-            return redirect()->back()->with('error', 'CV/Resume is required');
+            return redirect()->back()->with('job_application_error', 'CV/Resume is required');
         }
 
         // Handle KTP upload
@@ -222,7 +222,7 @@ class PublicController extends Controller
             $filename = time() . '_ktp_' . $file->getClientOriginalName();
             $ktpPath = $file->storeAs('guest_applications', $filename, 'public');
         } else {
-            return redirect()->back()->with('error', 'KTP (ID Card) is required');
+            return redirect()->back()->with('job_application_error', 'KTP (ID Card) is required');
         }
 
         // Create guest application
@@ -240,7 +240,7 @@ class PublicController extends Controller
             'status' => 'pending',
         ]);
 
-        return redirect()->back()->with('success', 'Application submitted successfully! We will contact you soon.');
+        return redirect()->back()->with('job_application_success', 'Application submitted successfully! We will review your application and contact you via email at ' . $validated['email'] . ' soon.');
     }
 
     /**

@@ -19,7 +19,17 @@ namespace App\Http\Controllers;
  *
  * @OA\Server(
  *     url=L5_SWAGGER_CONST_HOST,
- *     description="Job Portal API Server"
+ *     description="Job Portal API Server (Dynamic from APP_URL)"
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost:8000",
+ *     description="Local Development Server"
+ * )
+ *
+ * @OA\Server(
+ *     url="http://localhost",
+ *     description="Local Server (Port 80)"
  * )
  *
  * @OA\SecurityScheme(

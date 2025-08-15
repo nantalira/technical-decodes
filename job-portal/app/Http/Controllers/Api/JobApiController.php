@@ -264,8 +264,7 @@ class JobApiController extends Controller
      *                 @OA\Property(property="phone", type="string", example="+62812345678", description="Phone number"),
      *                 @OA\Property(property="address", type="string", example="Jakarta, Indonesia", description="Full address"),
      *                 @OA\Property(property="cv_file", type="string", format="binary", description="CV file (PDF/DOC/DOCX, max 5MB)"),
-     *                 @OA\Property(property="id_card_photo", type="string", format="binary", description="ID card photo (JPG/PNG, max 2MB)"),
-     *                 @OA\Property(property="cover_letter", type="string", example="I am interested in this position...", description="Cover letter (optional)")
+     *                 @OA\Property(property="id_card_photo", type="string", format="binary", description="ID card file (JPG/PNG/PDF, max 2MB)")
      *             )
      *         )
      *     ),
@@ -319,8 +318,7 @@ class JobApiController extends Controller
                 'phone' => 'required|string|max:20',
                 'address' => 'required|string',
                 'cv_file' => 'required|file|mimes:pdf,doc,docx|max:5120', // 5MB max
-                'id_card_photo' => 'required|image|mimes:jpeg,png,jpg|max:2048', // 2MB max
-                'cover_letter' => 'nullable|string|max:2000',
+                'id_card_photo' => 'required|file|mimes:jpeg,png,jpg,pdf|max:2048', // 2MB max, support PDF
             ], [
                 'job_id.required' => 'Job ID is required',
                 'job_id.exists' => 'Job not found',
@@ -332,10 +330,9 @@ class JobApiController extends Controller
                 'cv_file.required' => 'CV file is required',
                 'cv_file.mimes' => 'CV must be PDF, DOC, or DOCX format',
                 'cv_file.max' => 'CV file size must not exceed 5MB',
-                'id_card_photo.required' => 'ID card photo is required',
-                'id_card_photo.image' => 'ID card must be an image',
-                'id_card_photo.mimes' => 'ID card must be JPEG, PNG, or JPG format',
-                'id_card_photo.max' => 'ID card photo size must not exceed 2MB',
+                'id_card_photo.required' => 'ID card file is required',
+                'id_card_photo.mimes' => 'ID card must be JPEG, PNG, JPG, or PDF format',
+                'id_card_photo.max' => 'ID card file size must not exceed 2MB',
             ]);
 
             if ($validator->fails()) {
@@ -372,7 +369,7 @@ class JobApiController extends Controller
 
             // Store uploaded files
             $cvPath = $request->file('cv_file')->store('applications/cv', 'public');
-            $idCardPath = $request->file('id_card_photo')->store('applications/id-cards', 'public');
+            $ktpPath = $request->file('id_card_photo')->store('applications/ktp', 'public');
 
             // Create job application
             $application = JobApplication::create([
@@ -381,9 +378,8 @@ class JobApiController extends Controller
                 'email' => $request->email,
                 'phone' => $request->phone,
                 'address' => $request->address,
-                'cv_file' => $cvPath,
-                'id_card_photo' => $idCardPath,
-                'cover_letter' => $request->cover_letter,
+                'cv_path' => $cvPath,
+                'ktp_path' => $ktpPath,
                 'status' => 'pending',
                 'applied_at' => now(),
             ]);

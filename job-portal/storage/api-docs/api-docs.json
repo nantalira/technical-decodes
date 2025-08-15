@@ -16,13 +16,23 @@
     "servers": [
         {
             "url": "http://localhost:8000",
-            "description": "Job Portal API Server"
+            "description": "Job Portal API Server (Dynamic from APP_URL)"
+        },
+        {
+            "url": "http://localhost:8000",
+            "description": "Local Development Server"
+        },
+        {
+            "url": "http://localhost",
+            "description": "Local Server (Port 80)"
         }
     ],
     "paths": {
         "/api/v1/jobs": {
             "get": {
-                "tags": ["Jobs"],
+                "tags": [
+                    "Jobs"
+                ],
                 "summary": "Get list of available jobs",
                 "description": "Returns paginated list of active jobs with optional filtering",
                 "operationId": "getJobsList",
@@ -160,7 +170,9 @@
         },
         "/api/v1/jobs/{id}": {
             "get": {
-                "tags": ["Jobs"],
+                "tags": [
+                    "Jobs"
+                ],
                 "summary": "Get job details by ID",
                 "description": "Returns detailed information about a specific job",
                 "operationId": "getJobById",
@@ -233,7 +245,9 @@
         },
         "/api/v1/jobs/apply": {
             "post": {
-                "tags": ["Applications"],
+                "tags": [
+                    "Applications"
+                ],
                 "summary": "Submit job application",
                 "description": "Submit a new job application with required documents",
                 "operationId": "applyForJob",
@@ -276,14 +290,9 @@
                                         "format": "binary"
                                     },
                                     "id_card_photo": {
-                                        "description": "ID card photo (JPG/PNG, max 2MB)",
+                                        "description": "ID card file (JPG/PNG/PDF, max 2MB)",
                                         "type": "string",
                                         "format": "binary"
-                                    },
-                                    "cover_letter": {
-                                        "description": "Cover letter (optional)",
-                                        "type": "string",
-                                        "example": "I am interested in this position..."
                                     }
                                 },
                                 "type": "object"
@@ -440,7 +449,11 @@
                         "items": {
                             "type": "string"
                         },
-                        "example": ["Laravel", "PHP", "MySQL"]
+                        "example": [
+                            "Laravel",
+                            "PHP",
+                            "MySQL"
+                        ]
                     },
                     "is_active": {
                         "description": "Job availability status",
@@ -547,7 +560,9 @@
                                 "items": {
                                     "type": "string"
                                 },
-                                "example": ["The email field is required."]
+                                "example": [
+                                    "The email field is required."
+                                ]
                             },
                             "cv_file": {
                                 "type": "array",

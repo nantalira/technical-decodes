@@ -128,6 +128,14 @@ php artisan api:generate-key demo-client
 php artisan l5-swagger:generate
 ```
 
+### Step 7: Update .env File
+
+After running the API setup commands, you will find your generated API key in the output. Make sure to copy it and add it to your `.env` file:
+
+```env
+API_KEYS="demo-key-123,production-key-456"
+```
+
 ### Step 7: Start Application
 
 ```bash
